@@ -11,6 +11,8 @@ const useCounter = () => {
 
     return () => clearInterval(interval); // this will run when the component is unmounted
   }, []);
+
+  return counter;
 };
 
 export default useCounter;
