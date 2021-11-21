@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const useHttp = (requestConfig, dataConsumer) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -8,11 +8,12 @@ const useHttp = (requestConfig, dataConsumer) => {
     setIsLoading(true);
     setError(null);
     try {
-      //"https://react-http-69ae2-default-rtdb.firebaseio.com/tasks.json"
       const response = await fetch(requestConfig.url, {
-        method: requestConfig.method,
-        headers: requestConfig.headers,
-        body: JSON.stringify(response.body),
+        method: requestConfig.method ? requestConfig.method : "GET",
+        headers: requestConfig.headers ? requestConfig.headers : {},
+        body: JSON.stringify(requestConfig.body)
+          ? JSON.stringify(requestConfig.body)
+          : null,
       });
       console.log(response);
       if (!response.ok) {
@@ -21,8 +22,6 @@ const useHttp = (requestConfig, dataConsumer) => {
 
       const data = await response.json();
       dataConsumer(data); // feed the parsed-data to the dataConsumer
-
-      setTasks(loadedTasks);
     } catch (err) {
       setError(err.message || "Something went wrong!");
     }
